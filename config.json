@@ -1,0 +1,10 @@
+{
+    "port": 5000,
+    "mongodbUri": "mongodb://localhost:27017/foodmood-dev",
+    "environmentName": "local",
+    "storage": "fs",
+    "s3": {
+      "bucketName": "",
+      "roleArn": ""
+    }
+  }
