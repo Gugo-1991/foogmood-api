@@ -32,7 +32,6 @@ const getUsers = async (req, res) => {
           res.status(500).send(e);
         });
     } else {
-      console.log(`Getting all users`);
       res.status(200).send(
         users.map((user) => {
           return {
