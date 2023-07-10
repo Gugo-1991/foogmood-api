@@ -33,11 +33,13 @@ app.use((req, res, next) => {
   next();
 });
 
-const usersRoute = require("./src/routes/users");
 const authRoute = require("./src/routes/auth");
+const usersRoute = require("./src/routes/users");
+const itemsRoute = require("./src/routes/items");
 
-app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/items", itemsRoute);
 
 app.get("/", (req, res) => {
   res
