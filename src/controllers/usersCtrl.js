@@ -3,47 +3,17 @@ const { role } = require("../enums");
 
 const getUsers = async (req, res) => {
   User.find().then(async (users) => {
-    if (users.length === 0) {
-      const user = new User({
-        name: "Gurgen",
-        secondName: "Vardanyan",
-        email: "gurgen@gmail.com",
-        password: "gurgen",
-        role: role.admin,
-      });
-      await user
-        .save()
-        .then((newUser) => {
-          console.log(`Creating user: ${newUser}`);
-          res.status(200).send(
-            [newUser].map((user) => {
-              return {
-                name: user.name,
-                secondName: user.secondName,
-                email: user.email,
-                role: user.role,
-                createdDate: user.createdDate,
-              };
-            })
-          );
-        })
-        .catch((e) => {
-          console.log(`Error creating user: ${user}`);
-          res.status(500).send(e);
-        });
-    } else {
-      res.status(200).send(
-        users.map((user) => {
-          return {
-            name: user.name,
-            secondName: user.secondName,
-            email: user.email,
-            role: user.role,
-            createdDate: user.createdDate,
-          };
-        })
-      );
-    }
+    res.status(200).send(
+      users.map((user) => {
+        return {
+          name: user.name,
+          secondName: user.secondName,
+          email: user.email,
+          role: user.role,
+          createdDate: user.createdDate,
+        };
+      })
+    );
   });
 };
 
@@ -82,8 +52,41 @@ const createUser = async (req, res) => {
     });
 };
 
+const initFirstUser = (req, res) => {
+  User.find().then(async (users) => {
+    if (users.length === 0) {
+      const user = new User({
+        name: "Gurgen",
+        secondName: "Vardanyan",
+        email: "gurgen@gmail.com",
+        password: "gurgen",
+        role: role.admin,
+      });
+      await user
+        .save()
+        .then((newUser) => {
+          console.log(`Creating first user: ${newUser}`);
+          res.status(200).send({
+            name: newUser.name,
+            secondName: newUser.secondName,
+            email: newUser.email,
+            role: newUser.role,
+            createdDate: newUser.createdDate,
+          });
+        })
+        .catch((e) => {
+          console.log(`Error creating user: ${user}`);
+          res.status(500).send(e);
+        });
+    } else {
+      res.send(`Number of users is: ${users.length}`);
+    }
+  });
+};
+
 module.exports = {
   getUsers,
   createUser,
   getUserById,
+  initFirstUser,
 };
