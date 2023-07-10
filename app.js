@@ -2,11 +2,18 @@ const express = require("express");
 const Config = require("./config.json");
 const mongoose = require("mongoose");
 const http = require("http");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.json({ limit: "250mb" }));
 app.use(bodyParser.urlencoded({ limit: "250mb", extended: true }));
+app.use(
+  cors({
+    credentials: false,
+    origin: Config.origin.split(","),
+  })
+);
 
 mongoose
   .connect(Config.mongodbUri)
