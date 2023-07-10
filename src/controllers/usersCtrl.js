@@ -79,7 +79,7 @@ const initFirstUser = (req, res) => {
           res.status(500).send(e);
         });
     } else {
-      res.send("Number of users is not 0");
+      res.send(`Number of users is: ${users.length}`);
     }
   });
 };
