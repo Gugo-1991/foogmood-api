@@ -2,6 +2,7 @@ const User = require("../models/user");
 const { role } = require("../enums");
 const Account = require("../models/account");
 
+//GET api/v1/users
 const getUsers = async (req, res) => {
   User.find().then(async (users) => {
     res.status(200).send(
@@ -18,6 +19,7 @@ const getUsers = async (req, res) => {
   });
 };
 
+//GET api/v1/users/:id
 const getUserById = async (req, res) => {
   const { id } = req.params;
   User.findById(id)
@@ -36,6 +38,7 @@ const getUserById = async (req, res) => {
     });
 };
 
+//POST api/v1/users, BODY see User model
 const createUser = async (req, res) => {
   const user = req.body;
   const userExists = await userWithEmailExists(user.email);
@@ -68,6 +71,7 @@ const createUser = async (req, res) => {
   }
 };
 
+//POST api/v1/users/initFirstUser
 const initFirstUser = (req, res) => {
   User.find().then(async (users) => {
     if (users.length === 0) {
