@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const { role } = require("../enums");
+const Account = require("../models/account");
 
 const getUsers = async (req, res) => {
   User.find().then(async (users) => {
@@ -36,20 +37,35 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { user } = req.body;
-  User.save(user)
-    .then((user) => {
-      res.status(200).send({
-        name: user.name,
-        secondName: user.secondName,
-        email: user.email,
-        role: user.role,
-        createdDate: user.createdDate,
+  const user = req.body;
+  const userExists = await userWithEmailExists(user.email);
+  if (userExists) {
+    res
+      .status(500)
+      .send({ message: `User with email already exists: ${user.email}` });
+  } else {
+    new User(user)
+      .save()
+      .then((user) => {
+        new Account({ userId: user })
+          .save()
+          .then(() => {
+            res.status(200).send({
+              name: user.name,
+              secondName: user.secondName,
+              email: user.email,
+              role: user.role,
+              createdDate: user.createdDate,
+            });
+          })
+          .catch((e) => {
+            res.status(500).send(e);
+          });
+      })
+      .catch((e) => {
+        res.status(500).send(e);
       });
-    })
-    .catch((e) => {
-      res.status(500).send(e);
-    });
+  }
 };
 
 const initFirstUser = (req, res) => {
@@ -65,6 +81,7 @@ const initFirstUser = (req, res) => {
       await user
         .save()
         .then((newUser) => {
+          Account.save({ userId: newUser.id });
           console.log(`Creating first user: ${newUser}`);
           res.status(200).send({
             name: newUser.name,
@@ -82,6 +99,11 @@ const initFirstUser = (req, res) => {
       res.send(`Number of users is: ${users.length}`);
     }
   });
+};
+
+const userWithEmailExists = async (email) => {
+  const users = await User.find({ email });
+  return users.length > 0;
 };
 
 module.exports = {
