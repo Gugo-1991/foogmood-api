@@ -4,19 +4,24 @@ const Account = require("../models/account");
 
 //GET api/v1/users
 const getUsers = async (req, res) => {
-  User.find().then(async (users) => {
-    res.status(200).send(
-      users.map((user) => {
-        return {
-          name: user.name,
-          secondName: user.secondName,
-          email: user.email,
-          role: user.role,
-          createdDate: user.createdDate,
-        };
-      })
-    );
-  });
+  User.find()
+    .then(async (users) => {
+      res.status(200).send(
+        users.map((user) => {
+          return {
+            name: user.name,
+            secondName: user.secondName,
+            email: user.email,
+            role: user.role,
+            createdDate: user.createdDate,
+          };
+        })
+      );
+    })
+    .catch((e) => {
+      console.log(`Error getting all users`);
+      res.status(500).send(e);
+    });
 };
 
 //GET api/v1/users/:id
@@ -62,10 +67,12 @@ const createUser = async (req, res) => {
             });
           })
           .catch((e) => {
+            console.log(`Error creating user account, user id: ${user.id}`);
             res.status(500).send(e);
           });
       })
       .catch((e) => {
+        console.log(`Error creating user, user email: ${user.email}`);
         res.status(500).send(e);
       });
   }
