@@ -19,6 +19,10 @@ const itemSchema = new Schema({
     enum: ["breakfast", "lunch", "dinner"],
     default: "breakfast",
   },
+  image: {
+    type: URL,
+    required: true,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
