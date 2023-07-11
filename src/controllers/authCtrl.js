@@ -1,5 +1,6 @@
 const User = require("../models/user");
 
+//POST api/v1/auth/login, BODY {email: "email", password: "password"}
 const login = async (req, res) => {
   const { email, password } = req.body;
   User.find({ email, password }).then((user) => {

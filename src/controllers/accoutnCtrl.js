@@ -1,5 +1,6 @@
 const Account = require("../models/account");
 
+//GET api/v1/account/:userId
 const getUserAccount = async (req, res) => {
   const { userId } = req.params;
   Account.findOne({ userId }).then((accoutn) => {
@@ -10,11 +11,9 @@ const getUserAccount = async (req, res) => {
     }
   });
 };
-
+//PUT api/v1/account/:userId/:amount
 const fillUserBalance = async (req, res) => {
   const { userId, amount } = req.params;
-  console.log(amount);
-  console.log(parseFloat(amount));
   if (isNaN(amount)) {
     res
       .status(500)
