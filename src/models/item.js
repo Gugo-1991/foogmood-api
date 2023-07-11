@@ -20,7 +20,7 @@ const itemSchema = new Schema({
     default: "breakfast",
   },
   image: {
-    type: URL,
+    type: String,
     required: true,
   },
   createdDate: {
@@ -30,4 +30,4 @@ const itemSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("itemSchema", itemSchema);
+module.exports = mongoose.model("item", itemSchema);
