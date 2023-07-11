@@ -36,10 +36,12 @@ app.use((req, res, next) => {
 const authRoute = require("./src/routes/auth");
 const usersRoute = require("./src/routes/users");
 const itemsRoute = require("./src/routes/items");
+const accountRoute = require("./src/routes/account");
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/items", itemsRoute);
+app.use("/api/v1/accounts", accountRoute);
 
 app.get("/", (req, res) => {
   res
