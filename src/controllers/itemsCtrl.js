@@ -2,9 +2,14 @@ const Item = require("../models/item");
 
 //GET api/v1/items
 const getItems = async (req, res) => {
-  Item.find().then(async (items) => {
-    res.status(200).send(items);
-  });
+  Item.find()
+    .then(async (items) => {
+      res.status(200).send(items);
+    })
+    .catch((e) => {
+      console.log(`Error getting all items`);
+      res.status(500).send(e);
+    });
 };
 
 //GET api/v1/items/:id
