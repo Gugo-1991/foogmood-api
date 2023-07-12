@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const { role } = require("../enums");
 const Account = require("../models/account");
+const bcrypt = require("bcrypt");
 
 //GET api/v1/users
 const getUsers = async (req, res) => {
@@ -52,29 +53,34 @@ const createUser = async (req, res) => {
       .status(500)
       .send({ message: `User with email already exists: ${user.email}` });
   } else {
-    new User(user)
-      .save()
-      .then((user) => {
-        new Account({ userId: user })
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        user.password = hash;
+        new User(user)
           .save()
-          .then(() => {
-            res.status(200).send({
-              name: user.name,
-              secondName: user.secondName,
-              email: user.email,
-              role: user.role,
-              createdDate: user.createdDate,
-            });
+          .then((user) => {
+            new Account({ userId: user })
+              .save()
+              .then(() => {
+                res.status(200).send({
+                  name: user.name,
+                  secondName: user.secondName,
+                  email: user.email,
+                  role: user.role,
+                  createdDate: user.createdDate,
+                });
+              })
+              .catch((e) => {
+                res.status(500).send(e);
+              });
           })
           .catch((e) => {
             console.log(`Error creating user account, user id: ${user.id}`);
             res.status(500).send(e);
           });
       })
-      .catch((e) => {
-        console.log(`Error creating user, user email: ${user.email}`);
-        res.status(500).send(e);
       });
+    });
   }
 };
 
