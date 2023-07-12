@@ -13,8 +13,6 @@ const getUserAccount = async (req, res) => {
 
 const fillUserBalance = async (req, res) => {
   const { userId, amount } = req.params;
-  console.log(amount);
-  console.log(parseFloat(amount));
   if (isNaN(amount)) {
     res
       .status(500)

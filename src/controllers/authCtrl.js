@@ -1,12 +1,26 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  User.find({ email, password }).then((user) => {
+  User.findOne({ email }).then((user) => {
     if (user) {
-      res.status(200).send(true);
+      const isLogin = bcrypt.compareSync(password, user.password);
+      if (isLogin) {
+        res
+          .status(200)
+          .send({ status: true, message: `Loged in user: ${email}` });
+      } else {
+        res.status(401).send({
+          status: false,
+          message: `Wrong password for user: ${email}`,
+        });
+      }
     } else {
-      res.status(401).send(false);
+      res.status(403).send({
+        status: false,
+        message: `User not found: ${email}`,
+      });
     }
   });
 };
