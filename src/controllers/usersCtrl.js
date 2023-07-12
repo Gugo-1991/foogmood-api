@@ -78,7 +78,6 @@ const createUser = async (req, res) => {
             console.log(`Error creating user account, user id: ${user.id}`);
             res.status(500).send(e);
           });
-      })
       });
     });
   }
