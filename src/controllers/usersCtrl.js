@@ -3,22 +3,29 @@ const { role } = require("../enums");
 const Account = require("../models/account");
 const bcrypt = require("bcrypt");
 
+//GET api/v1/users
 const getUsers = async (req, res) => {
-  User.find().then(async (users) => {
-    res.status(200).send(
-      users.map((user) => {
-        return {
-          name: user.name,
-          secondName: user.secondName,
-          email: user.email,
-          role: user.role,
-          createdDate: user.createdDate,
-        };
-      })
-    );
-  });
+  User.find()
+    .then(async (users) => {
+      res.status(200).send(
+        users.map((user) => {
+          return {
+            name: user.name,
+            secondName: user.secondName,
+            email: user.email,
+            role: user.role,
+            createdDate: user.createdDate,
+          };
+        })
+      );
+    })
+    .catch((e) => {
+      console.log(`Error getting all users`);
+      res.status(500).send(e);
+    });
 };
 
+//GET api/v1/users/:id
 const getUserById = async (req, res) => {
   const { id } = req.params;
   User.findById(id)
@@ -37,6 +44,7 @@ const getUserById = async (req, res) => {
     });
 };
 
+//POST api/v1/users, BODY see User model
 const createUser = async (req, res) => {
   const user = req.body;
   const userExists = await userWithEmailExists(user.email);
@@ -67,13 +75,16 @@ const createUser = async (req, res) => {
               });
           })
           .catch((e) => {
+            console.log(`Error creating user account, user id: ${user.id}`);
             res.status(500).send(e);
           });
+      })
       });
     });
   }
 };
 
+//POST api/v1/users/initFirstUser
 const initFirstUser = (req, res) => {
   User.find().then(async (users) => {
     if (users.length === 0) {

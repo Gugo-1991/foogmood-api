@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
+//POST api/v1/auth/login, BODY {email: "email", password: "password"}
 const login = async (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }).then((user) => {
