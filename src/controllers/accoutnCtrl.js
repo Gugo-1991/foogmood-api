@@ -1,4 +1,4 @@
-const Account = require("../models/account");
+const Account = require("../models/account").default;
 
 //GET api/v1/account/:userId
 const getUserAccount = async (req, res) => {
