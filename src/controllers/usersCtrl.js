@@ -97,18 +97,20 @@ const initFirstUser = (req, res) => {
       await user
         .save()
         .then((newUser) => {
-          Account.save({ userId: newUser.id });
-          console.log(`Creating first user: ${newUser}`);
-          res.status(200).send({
-            name: newUser.name,
-            secondName: newUser.secondName,
-            email: newUser.email,
-            role: newUser.role,
-            createdDate: newUser.createdDate,
+          const account = new Account({ userId: newUser._id });
+          account.save().then(() => {
+            console.log(`Creating first user: ${newUser}`);
+            res.status(200).send({
+              name: newUser.name,
+              secondName: newUser.secondName,
+              email: newUser.email,
+              role: newUser.role,
+              createdDate: newUser.createdDate,
+            });
           });
         })
         .catch((e) => {
-          console.log(`Error creating user: ${user}`);
+          console.log(`Error creating user: ${user.name}`);
           res.status(500).send(e);
         });
     } else {
