@@ -7,7 +7,6 @@ const getItems = async (req, res) => {
       res.status(200).send(items);
     })
     .catch((e) => {
-      console.log(`Error getting all items`);
       res.status(500).send(e);
     });
 };
@@ -20,7 +19,6 @@ const getItemById = async (req, res) => {
       res.status(200).send(item);
     })
     .catch((e) => {
-      console.log(`Error getting item id: ${id}`);
       res.status(500).send(e);
     });
 };
