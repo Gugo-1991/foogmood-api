@@ -87,32 +87,37 @@ const createUser = async (req, res) => {
 const initFirstUser = (req, res) => {
   User.find().then(async (users) => {
     if (users.length === 0) {
-      const user = new User({
-        name: "Gurgen",
-        secondName: "Vardanyan",
-        email: "gurgen@gmail.com",
-        password: "gurgen",
-        role: role.admin,
-      });
-      await user
-        .save()
-        .then((newUser) => {
-          const account = new Account({ userId: newUser._id });
-          account.save().then(() => {
-            console.log(`Creating first user: ${newUser}`);
-            res.status(200).send({
-              name: newUser.name,
-              secondName: newUser.secondName,
-              email: newUser.email,
-              role: newUser.role,
-              createdDate: newUser.createdDate,
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash("gurgen", salt, (err, hash) => {
+          const user = new User({
+            name: "Gurgen",
+            secondName: "Vardanyan",
+            email: "gurgen@gmail.com",
+            password: hash,
+            role: role.admin,
+          })
+            .save()
+            .then((newUser) => {
+              const account = new Account({ userId: newUser._id });
+              account.save().then(() => {
+                console.log(`Creating first user: ${newUser}`);
+
+                res.status(200).send({
+                  name: newUser.name,
+                  secondName: newUser.secondName,
+                  email: newUser.email,
+                  password: hash,
+                  role: newUser.role,
+                  createdDate: newUser.createdDate,
+                });
+              });
+            })
+            .catch((e) => {
+              console.log(`Error creating user: ${user.name}`);
+              res.status(500).send(e);
             });
-          });
-        })
-        .catch((e) => {
-          console.log(`Error creating user: ${user.name}`);
-          res.status(500).send(e);
         });
+      });
     } else {
       res.send(`Number of users is: ${users.length}`);
     }
