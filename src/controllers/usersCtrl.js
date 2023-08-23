@@ -88,20 +88,45 @@ const initFirstUser = (req, res) => {
   User.find().then(async (users) => {
     if (users.length === 0) {
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash("gurgen", salt, (err, hash) => {
+        bcrypt.hash("artur", salt, (err, hash) => {
           const user = new User({
-            name: "Gurgen",
-            secondName: "Vardanyan",
-            email: "gurgen@gmail.com",
+            name: "Artur",
+            secondName: "Gularyan",
+            email: "artur@gmail.com",
             password: hash,
             role: role.admin,
-          })
-            .save()
+          });
+          User.findOneAndUpdate(
+            { email: user.email },
+            {
+              $set: {
+                name: "Artur",
+                secondName: "Gularyan",
+                email: "artur@gmail.com",
+                password: hash,
+                role: role.admin,
+              },
+            },
+            {
+              upsert: true,
+              new: true,
+              setDefaultsOnInsert: true,
+            }
+          )
             .then((newUser) => {
-              const account = new Account({ userId: newUser._id });
-              account.save().then(() => {
-                console.log(`Creating first user: ${newUser}`);
-
+              Account.findOneAndUpdate(
+                { userId: newUser._id },
+                {
+                  $set: {
+                    userId: newUser._id,
+                  },
+                },
+                {
+                  upsert: true,
+                  new: true,
+                  setDefaultsOnInsert: true,
+                }
+              ).then(() => {
                 res.status(200).send({
                   name: newUser.name,
                   secondName: newUser.secondName,
