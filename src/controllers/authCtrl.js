@@ -10,7 +10,11 @@ const login = async (req, res) => {
       if (isLogin) {
         res
           .status(200)
-          .send({ status: true, message: `Loged in user: ${email}` });
+          .send({
+            status: true,
+            role: user.role,
+            message: `Loged in user: ${email}`,
+          });
       } else {
         res.status(401).send({
           status: false,
