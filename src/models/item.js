@@ -8,7 +8,7 @@ const itemSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   price: {
     type: Number,
@@ -20,9 +20,9 @@ const itemSchema = new Schema({
     enum: ["breakfast", "lunch", "dinner"],
     default: "breakfast",
   },
-  image: {
+  img: {
     type: String,
-    required: true,
+    required: false,
   },
   createdDate: {
     type: Date,

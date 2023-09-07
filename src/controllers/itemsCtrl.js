@@ -27,8 +27,9 @@ const getItemById = async (req, res) => {
 
 //POST api/v1/items, BODY see Item model
 const createItem = async (req, res) => {
-  const { item } = req.body;
-  Item.save(item)
+  const item = req.body;
+  const it = new Item(item);
+  it.save()
     .then((item) => {
       res.status(200).send(item);
     })

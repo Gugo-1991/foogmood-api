@@ -47,7 +47,10 @@ const getUserById = async (req, res) => {
 //POST api/v1/users, BODY see User model
 const createUser = async (req, res) => {
   const user = req.body;
+  console.log(user);
   const userExists = await userWithEmailExists(user.email);
+  console.log(user);
+
   if (userExists) {
     res
       .status(500)
@@ -88,11 +91,11 @@ const initFirstUser = (req, res) => {
   User.find().then(async (users) => {
     if (users.length === 0) {
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash("artur", salt, (err, hash) => {
+        bcrypt.hash("gurgen", salt, (err, hash) => {
           const user = new User({
-            name: "Artur",
-            secondName: "Gularyan",
-            email: "artur@gmail.com",
+            name: "Gurgen",
+            secondName: "Vardanyan",
+            email: "gurgen@gmail.com",
             password: hash,
             role: role.admin,
           });
@@ -100,9 +103,9 @@ const initFirstUser = (req, res) => {
             { email: user.email },
             {
               $set: {
-                name: "Artur",
-                secondName: "Gularyan",
-                email: "artur@gmail.com",
+                name: "Gurgen",
+                secondName: "Vardanyan",
+                email: "gurgen@gmail.com",
                 password: hash,
                 role: role.admin,
               },
