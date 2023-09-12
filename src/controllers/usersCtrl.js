@@ -152,6 +152,35 @@ const initFirstUser = (req, res) => {
   });
 };
 
+//PUT api/v1/users/:id, BODY see Item model
+const updateUserById = async (req, res) => {
+  const user = req.body;
+  const { id } = req.params;
+  User.findByIdAndUpdate(
+    { _id: id },
+    { ...user, lastUpdateDate: Date.now() },
+    { new: true }
+  )
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((e) => {
+      res.status(500).send(e);
+    });
+};
+
+//DELETE api/v1/users/:id
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  User.deleteOne({ _id: id })
+    .then((resp) => {
+      res.status(200).send(resp);
+    })
+    .catch((e) => {
+      res.status(500).send(e);
+    });
+};
+
 const userWithEmailExists = async (email) => {
   const users = await User.find({ email });
   return users.length > 0;
@@ -162,4 +191,6 @@ module.exports = {
   createUser,
   getUserById,
   initFirstUser,
+  updateUserById,
+  deleteById,
 };
