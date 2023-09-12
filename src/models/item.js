@@ -29,6 +29,11 @@ const itemSchema = new Schema({
     default: Date.now,
     index: true,
   },
+  lastUpdateDate: {
+    type: Date,
+    default: Date.now,
+    index: true,
+  },
 });
 
 module.exports = mongoose.model("item", itemSchema);
