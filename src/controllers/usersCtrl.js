@@ -47,10 +47,7 @@ const getUserById = async (req, res) => {
 //POST api/v1/users, BODY see User model
 const createUser = async (req, res) => {
   const user = req.body;
-  console.log(user);
   const userExists = await userWithEmailExists(user.email);
-  console.log(user);
-
   if (userExists) {
     res
       .status(500)
