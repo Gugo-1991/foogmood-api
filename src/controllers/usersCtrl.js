@@ -89,23 +89,17 @@ const initFirstUser = (req, res) => {
     if (users.length === 0) {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash("gurgen", salt, (err, hash) => {
-          const user = new User({
+          const user = {
             name: "Gurgen",
             secondName: "Vardanyan",
             email: "gurgen@gmail.com",
             password: hash,
             role: role.admin,
-          });
+          };
           User.findOneAndUpdate(
             { email: user.email },
             {
-              $set: {
-                name: "Gurgen",
-                secondName: "Vardanyan",
-                email: "gurgen@gmail.com",
-                password: hash,
-                role: role.admin,
-              },
+              $set: { ...user },
             },
             {
               upsert: true,
@@ -138,7 +132,7 @@ const initFirstUser = (req, res) => {
               });
             })
             .catch((e) => {
-              console.log(`Error creating user: ${user.name}`);
+              console.log(`Error while creating user: ${user.name}`);
               res.status(500).send(e);
             });
         });
