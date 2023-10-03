@@ -1,6 +1,6 @@
 const Account = require("../models/account");
 
-//GET api/v1/account/:userId
+//GET api/v1/accounts/:userId
 const getUserAccount = async (req, res) => {
   const { userId } = req.params;
   Account.findOne({ userId }).then((accoutn) => {
@@ -12,7 +12,7 @@ const getUserAccount = async (req, res) => {
   });
 };
 
-//PUT api/v1/account/:userId/:amount
+//PUT api/v1/accounts/:userId/:amount
 const fillUserBalance = async (req, res) => {
   const { userId, amount } = req.params;
   if (isNaN(amount)) {
@@ -32,7 +32,7 @@ const fillUserBalance = async (req, res) => {
   });
 };
 
-//PUT api/v1/account/:userId
+//PUT api/v1/accounts/:userId
 const assignAccountToUser = async (req, res) => {
   const { userId } = req.params;
   const userAccount = await Account.findOne({ userId });
